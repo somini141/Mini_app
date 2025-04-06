@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Туристическое агентство "Пляж"</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/test.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="page-header">
+            <nav class="flex-container">
+                <img src="{% static 'images/logo.png' %}" alt="Пляж" class="logo">
+                <h1 class="header-title">Туристическое агентство "ПЛЯЖ"</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <ul>
+                    <p><a href="#about">О компании</a></p>
+                    <p><a href="#directions">Направления</a></p>
+                    <p><a href="#form" class="btn">Заполнить форму заявки</a></p>
+                </ul>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <section id="about">
+                <h1>О компании</h1>
+                <div class="komp">
+                    <img src="{% static 'images/logo.png' %}" alt="ТА Пляж" class="company-logo">
+                </div>
+                <h2 class="o_komp">Туристическое агентство "Пляж" это:</h2>
+                <ul class="o_komp">
+                    <li>16 лет опыта в туризме;</li>
+                    <li>Работа с надежными и честными туроператороми;</li>
+                    <li>Самые разнообразные маршруты во все уголки земного шара;</li>
+                    <li>Интересные спецпредложения;</li>
+                    <li>Увлекательная и познавательная информация о странах, направлениях, курортах, отелях;</li>
+                    <li>Строгое соответствие всех оформленных документов нормам законодательства;</li>
+                    <li>Мобильность и индивидуальный подход к каждому;</li>
+                    <li>Выгодное кредитование;</li>
+                    <li>Визы, страхование, билеты.</li>
+                </ul>
+            </section>
+
+            <section id="directions">
+                <h1>Направления для ОТДЫХА</h1>
+                <div class="cards-container">
+                    {% for country in countries %}
+                    <div class="card" onclick="openModal('{{ country.name }}', '{{ country.image.url }}')">
+                        <h3>{{ country.name }}</h3>
+                        <p>{{ country.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="form-container" id="form">
+                <h2>Заявка на тур</h2>
+                <form id="tourForm">
+                    <div class="form-group">
+                        <label for="name">Имя:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surname">Фамилия:</label>
+                        <input type="text" id="surname" name="surname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Телефон:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Выберите страну:</label>
+                        <select id="country" name="country" required>
+                            {% for country in countries %}
+                            <option value="{{ country.id }}">{{ country.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit">Отправить заявку</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <div id="countryModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+            <div class="country-title" id="modalTitle"></div>
+        </div>
+
+        <footer class="page-footer">
+            <section id="contacts">
+                <div class="information">
+                    <div class="content-inform">
+                        <p class="H1">КОНТАКТЫ</p>
+                        <div class="H2"><p>plyazhnk@mail.ru</p></div>
+                        <div class="H2"><p>+7(919)-648-19-60</p></div>
+                        <div class="H2"><p>Россия, Нижнекамск, пр-кт Строителей, 32</p></div>
+                        <div class="H2"><p>Наш номер в Росреестре туристических агентств - РТА 0011852</p></div>
+                    </div>
+                    <div class="map">
+                        <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A936deda7a01038537123c3dd9d269d8d8da7161859c40fee80127eab17dec3fa&amp;width=100%&amp;height=240&amp;lang=ru_RU&amp;scroll=true"></script>
+                    </div>
+                </div>
+            </section>
+        </footer>
+    </div>
+
+    <script>
+        // Модальное окно
+        function openModal(countryName, imageUrl) {
+            const modal = document.getElementById('countryModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+
+            modal.style.display = "block";
+            modalImg.src = imageUrl;
+            modalImg.alt = countryName;
+            modalTitle.textContent = countryName;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('countryModal').style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('countryModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Мобильное меню
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Отправка формы
+        document.getElementById('tourForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                surname: document.getElementById('surname').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                country_id: document.getElementById('country').value
+            };
+
+            fetch('/submit_request/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Ваша заявка успешно отправлена!');
+                    document.getElementById('tourForm').reset();
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Произошла ошибка при отправке формы');
+            });
+        });
+        document.getElementById('tourForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Показываем индикатор загрузки
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+
+    // Отправляем данные формы
+    fetch('/submit_request/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Ваша заявка успешно отправлена!');
+            form.reset();
+        } else {
+            throw new Error(data.message || 'Ошибка сервера');
+        }
+    })
+    .catch(error => {
+        alert('Ошибка: ' + error.message);
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отправить заявку';
+    });
+    });
+    </script>
+</body>
+</html>
